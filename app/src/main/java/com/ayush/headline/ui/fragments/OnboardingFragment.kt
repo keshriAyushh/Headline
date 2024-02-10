@@ -10,14 +10,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.ayush.headline.R
-import com.ayush.headline.data.remote.OnboardingItem
+import com.ayush.headline.data.models.OnboardingItem
 import com.ayush.headline.databinding.FragmentOnboardingBinding
 import com.ayush.headline.ui.adapters.OnboardingViewPagerAdapter
+import com.ayush.headline.utils.Constants.LOSING
+import com.ayush.headline.utils.Constants.UNAVAILABLE
 import com.ayush.headline.utils.NetworkUtil
 import com.ayush.headline.utils.SnackbarUtil
 import com.ayush.headline.utils.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,10 +50,10 @@ class OnboardingFragment : Fragment() {
             when(it) {
                 Status.AVAILABLE -> {}
                 Status.UNAVAILABLE -> {
-                    SnackbarUtil(binding.root, "No internet connection! Showing limited content")
+                    SnackbarUtil(binding.root, UNAVAILABLE)
                 }
                 Status.LOSING -> {
-                    SnackbarUtil(binding.root, "Poor Connection!")
+                    SnackbarUtil(binding.root, LOSING)
                 }
             }
         }

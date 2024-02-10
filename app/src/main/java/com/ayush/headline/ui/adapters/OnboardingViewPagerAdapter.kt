@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ayush.headline.data.remote.OnboardingItem
+import com.ayush.headline.data.models.OnboardingItem
 import com.ayush.headline.databinding.OnboardingItemBinding
 
 class OnboardingViewPagerAdapter(

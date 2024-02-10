@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/home"
+    <item android:id="@+id/homeFragment"
         android:icon="@drawable/home"
         android:title="Home"
         android:iconTint="@color/white"/>
 
-    <item android:id="@+id/search"
+    <item android:id="@+id/searchFragment"
         android:icon="@drawable/search"
         android:title="Search"
         android:iconTint="@color/white"/>
 
-    <item android:id="@+id/favourites"
+    <item android:id="@+id/favouritesFragment"
         android:icon="@drawable/heart"
         android:title="Favourites"
         android:iconTint="@color/white"/>
