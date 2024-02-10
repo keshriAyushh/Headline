@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ayush.headline.data.models.Article
 import com.ayush.headline.data.models.NewsItem
 import com.ayush.headline.data.repository.NewsRepository
 import com.ayush.headline.utils.Constants
 import com.ayush.headline.utils.PreferenceManager
 import com.ayush.headline.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +25,9 @@ class HomeViewModel @Inject constructor(
 
     private val _topHeadlinesByCategoryState = MutableLiveData<Response<NewsItem?>>(Response.None)
     val topHeadlinesByCategoryState: LiveData<Response<NewsItem?>> get() = _topHeadlinesByCategoryState
+
+    private val _articlesFromDb = MutableLiveData<Response<List<Article>>>(Response.None)
+    val articlesFromDb: LiveData<Response<List<Article>>> get() = _articlesFromDb
 
     fun userOnboarded() {
         viewModelScope.launch {
@@ -50,6 +53,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchHeadlinesFromDb() {
-
+        viewModelScope.launch {
+            newsRepository.fetchDataFromDb().collect {
+                _articlesFromDb.value = it
+            }
+        }
     }
 }

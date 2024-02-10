@@ -38,7 +38,7 @@ class NewsAdapter(
             }
 
             binding.newsCard.setOnClickListener {
-                listener.onItemClicked(item.url, item)
+                listener.onItemClicked(item.url!!, item)
             }
         }
     }

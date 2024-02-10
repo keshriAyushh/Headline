@@ -1,5 +1,8 @@
 package com.ayush.headline.di
 
+import android.app.Application
+import androidx.room.Room
+import com.ayush.headline.data.local.ArticleDatabase
 import com.ayush.headline.data.remote.NewsService
 import com.ayush.headline.data.repository.NewsRepository
 import com.ayush.headline.data.repository.impl.NewsRepositoryImpl
@@ -26,5 +29,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesNewsRepository(newsService: NewsService): NewsRepository = NewsRepositoryImpl(newsService)
+    fun providesArticlesDatabase(app: Application): ArticleDatabase {
+        return Room.databaseBuilder(
+            app.applicationContext,
+            ArticleDatabase::class.java,
+            Constants.DATABASE_NAME
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesNewsRepository(newsService: NewsService, db: ArticleDatabase): NewsRepository = NewsRepositoryImpl(newsService, db)
 }

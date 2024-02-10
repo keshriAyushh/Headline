@@ -2,13 +2,13 @@ package com.ayush.headline.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayush.headline.R
 import com.ayush.headline.data.models.Article
@@ -60,12 +60,13 @@ class HomeFragment : Fragment(), NewsItemClicksListener {
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         viewModel.userOnboarded()
         setupTabs()
-        viewModel.getHeadlines()
+        
 
         networkUtil.observe(viewLifecycleOwner) {
             when (it) {
                 Status.AVAILABLE -> {
                     networkAvailable = true
+                    viewModel.getHeadlines()
                 }
 
                 Status.UNAVAILABLE -> {
@@ -104,6 +105,30 @@ class HomeFragment : Fragment(), NewsItemClicksListener {
 //                        dataByCategory[category] = it.data
                         setHomeData(it.data.articles)
                     }
+                }
+            }
+        }
+        
+        viewModel.articlesFromDb.observe(viewLifecycleOwner) { it ->
+            when(it) {
+                is Response.Error -> {
+                    Log.d("error", it.message)
+                    SnackbarUtil(binding.root, it.message)
+                }
+                Response.Loading -> {
+                    binding.mainLayout.visibility = View.GONE
+                    binding.loadingLayout.visibility = View.VISIBLE
+                }
+
+                Response.None -> {
+                    binding.mainLayout.visibility = View.VISIBLE
+                    binding.loadingLayout.visibility = View.GONE
+                }
+                is Response.Success -> {
+                    binding.mainLayout.visibility = View.VISIBLE
+                    binding.loadingLayout.visibility = View.GONE
+                    Log.d("articles", it.data.toString())
+                    setHomeData(it.data)
                 }
             }
         }

@@ -1,6 +1,8 @@
 package com.ayush.headline.utils
 
 object Constants {
+    const val DATABASE_NAME: String = "articleDb"
+    const val ENTITY_NAME: String = "article"
     const val ERR: String = "An unknown error has occurred!"
     const val FIRST: String = "first"
     const val LOSING: String = "Poor Connection!"
