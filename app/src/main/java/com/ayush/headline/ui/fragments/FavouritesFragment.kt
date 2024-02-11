@@ -41,6 +41,7 @@ class FavouritesFragment : Fragment(), NewsItemClicksListener {
     ): View {
         activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.visibility = View.VISIBLE
         binding = FragmentFavouritesBinding.inflate(layoutInflater)
+        viewModel.getSavedArticles()
 
         viewModel.getSavedArticlesState.observe(viewLifecycleOwner) {
             when (it) {

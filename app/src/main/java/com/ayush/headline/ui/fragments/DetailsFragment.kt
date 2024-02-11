@@ -1,7 +1,11 @@
 package com.ayush.headline.ui.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +57,9 @@ class DetailsFragment : Fragment() {
         binding = FragmentDetailsBinding.inflate(layoutInflater)
         activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.visibility = View.GONE
 
+        val articleToSend =
+            if (args.NewsArticle.title != "") args.NewsArticle.url else args.LikedArticle.url
+
         BottomSheetBehavior.from(binding.bottomLayout)
             .apply {
                 peekHeight = 150
@@ -67,7 +74,6 @@ class DetailsFragment : Fragment() {
                     networkAvailable = false
                     SnackbarUtil(binding.root, Constants.UNAVAILABLE)
                 }
-
                 Status.LOSING -> {
                     networkAvailable = true
                     SnackbarUtil(binding.root, Constants.LOSING)
@@ -80,7 +86,6 @@ class DetailsFragment : Fragment() {
                 is Response.Error -> {
                     SnackbarUtil(binding.root, it.message)
                 }
-
                 Response.Loading -> {}
                 Response.None -> {}
                 is Response.Success -> {
@@ -94,7 +99,12 @@ class DetailsFragment : Fragment() {
                 is Response.Error -> SnackbarUtil(binding.root, it.message)
                 Response.Loading -> {}
                 Response.None -> {}
-                is Response.Success -> SnackbarUtil(binding.root, "Removed from favourites!")
+                is Response.Success -> {
+                    SnackbarUtil(binding.root, "Removed from favourites!")
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        findNavController().popBackStack(R.id.favouritesFragment, false)
+                    }, 1000)
+                }
             }
         }
         /*
@@ -132,11 +142,58 @@ class DetailsFragment : Fragment() {
 
         binding.ivDelete.setOnClickListener {
             viewModel.deleteArticle(args.LikedArticle)
-            findNavController().popBackStack(R.id.favouritesFragment, false)
         }
 
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.ivWhatsapp.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.setType("text/plain")
+            intent.setPackage("com.whatsapp")
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey, check this article out $articleToSend")
+            try {
+                this.context.startActivity(intent)
+            } catch (e: Exception) {
+                Log.d("sendError", e.message ?: "null")
+            }
+        }
+
+        binding.ivInstagram.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.setType("text/plain")
+            intent.setPackage("com.instagram.android")
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey, check this article out $articleToSend")
+            try {
+                this.context.startActivity(intent)
+            } catch (e: Exception) {
+                Log.d("sendError", e.message ?: "null")
+            }
+        }
+
+        binding.ivTelegram.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.setType("text/plain")
+            intent.setPackage("org.telegram.messenger")
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey, check this article out $articleToSend")
+            try {
+                this.context.startActivity(intent)
+            } catch (e: Exception) {
+                Log.d("sendError", e.message ?: "null")
+            }
+        }
+
+        binding.ivShare.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.setType("text/plain")
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey, check this article out $articleToSend")
+            val shareIntent = Intent.createChooser(intent, null)
+            try {
+                this.context.startActivity(shareIntent)
+            } catch (e: Exception) {
+                Log.d("sendError,", e.message ?: "null")
+            }
         }
 
         binding.btnLike.setOnClickListener {
@@ -151,7 +208,7 @@ class DetailsFragment : Fragment() {
                     source = args.NewsArticle.source ?: Source(),
                     publishedAt = args.NewsArticle.publishedAt ?: "",
                     isLiked = true,
-                    content = args.NewsArticle.content!!
+                    content = args.NewsArticle.content ?: ""
                 )
                 if (isLiked) {
                     viewModel.saveArticle(likedArticle.copy(isLiked = true))
