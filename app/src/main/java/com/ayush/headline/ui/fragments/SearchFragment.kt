@@ -2,14 +2,16 @@ package com.ayush.headline.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayush.headline.R
 import com.ayush.headline.data.models.Article
+import com.ayush.headline.data.models.LikedArticle
 import com.ayush.headline.databinding.FragmentSearchBinding
 import com.ayush.headline.ui.adapters.NewsAdapter
 import com.ayush.headline.ui.viewmodels.SearchViewModel
@@ -19,6 +21,7 @@ import com.ayush.headline.utils.NewsItemClicksListener
 import com.ayush.headline.utils.Response
 import com.ayush.headline.utils.SnackbarUtil
 import com.ayush.headline.utils.Status
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -44,6 +47,7 @@ class SearchFragment : Fragment(), NewsItemClicksListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater)
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.visibility = View.VISIBLE
 
         networkUtil.observe(viewLifecycleOwner) {
             when (it) {
@@ -87,7 +91,10 @@ class SearchFragment : Fragment(), NewsItemClicksListener {
                     }
                 }
             } else {
-                SnackbarUtil(binding.root, "Please turn on your internet to search for news articles!")
+                SnackbarUtil(
+                    binding.root,
+                    "Please turn on your internet to search for news articles!"
+                )
             }
         }
 
@@ -96,8 +103,9 @@ class SearchFragment : Fragment(), NewsItemClicksListener {
         return binding.root
     }
 
-    override fun onItemClicked(url: String, article: Article) {
-
+    override fun onItemClicked(article: Article, likedArticle: LikedArticle) {
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToDetailsFragment(article, likedArticle)
+        findNavController().navigate(action)
     }
-
 }

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ayush.headline.data.models.Article
+import com.ayush.headline.data.models.LikedArticle
 
 @Dao
 interface ArticlesDao {
@@ -19,5 +20,17 @@ interface ArticlesDao {
 
     @Delete
     suspend fun deleteArticle(article: Article)
+
+    @Query("DELETE FROM `article`")
+    suspend fun deleteAllArticles()
+
+    @Query("SELECT * FROM `liked`")
+    suspend fun getSavedArticles(): List<LikedArticle>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveArticle(likedArticle: LikedArticle)
+
+    @Delete
+    suspend fun deleteSavedArticle(likedArticle: LikedArticle)
 
 }

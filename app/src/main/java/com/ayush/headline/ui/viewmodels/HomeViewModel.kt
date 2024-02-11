@@ -29,6 +29,10 @@ class HomeViewModel @Inject constructor(
     private val _articlesFromDb = MutableLiveData<Response<List<Article>>>(Response.None)
     val articlesFromDb: LiveData<Response<List<Article>>> get() = _articlesFromDb
 
+    init {
+        getHeadlines()
+    }
+
     fun userOnboarded() {
         viewModelScope.launch {
             preferenceManager.saveBooleanValue(Constants.FIRST, true)

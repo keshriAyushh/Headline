@@ -1,7 +1,8 @@
 package com.ayush.headline.utils
 
 import com.ayush.headline.data.models.Article
+import com.ayush.headline.data.models.LikedArticle
 
 interface NewsItemClicksListener {
-    fun onItemClicked(url: String, article: Article)
+    fun onItemClicked(article: Article, likedArticle: LikedArticle)
 }

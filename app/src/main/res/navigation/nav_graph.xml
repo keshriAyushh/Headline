@@ -39,7 +39,6 @@
         android:name="com.ayush.headline.ui.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
-
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -57,7 +56,7 @@
         android:id="@+id/favouritesFragment"
         android:name="com.ayush.headline.ui.fragments.FavouritesFragment"
         android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites" >
+        tools:layout="@layout/fragment_favourites">
         <action
             android:id="@+id/action_favouritesFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -67,5 +66,25 @@
         android:name="com.ayush.headline.ui.fragments.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details">
+        <argument
+            android:name="NewsArticle"
+            app:argType="com.ayush.headline.data.models.Article"
+            app:nullable="false" />
+        <argument
+            android:name="LikedArticle"
+            app:argType="com.ayush.headline.data.models.LikedArticle"
+            app:nullable="false" />
+        <action
+            android:id="@+id/action_detailsFragment_to_webFragment"
+            app:destination="@id/webFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webFragment"
+        android:name="com.ayush.headline.ui.fragments.WebFragment"
+        android:label="fragment_web"
+        tools:layout="@layout/fragment_web">
+        <argument
+            android:name="url"
+            app:argType="string" />
     </fragment>
 </navigation>

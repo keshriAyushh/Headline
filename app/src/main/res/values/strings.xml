@@ -4,6 +4,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="welcome">Welcome</string>
+    <string name="favourites">Favourites</string>
+    <string name="search">Search</string>
     <string name="intro_title1">Welcome to Headline</string>
     <string name="intro_desc1">Dive into a dynamic stream of current events, tailored to your interests. From global headlines to niche topics, our news feed keeps you connected to the stories that matter most to you.</string>
 
@@ -12,4 +14,8 @@
 
     <string name="intro_title3">Seamless offline access</string>
     <string name="intro_desc3">Never miss a beat, even when you\'re offline. Our app\'s intelligent caching feature ensures that your saved articles are readily available, whether you\'re commuting underground or traveling to remote areas without internet access.</string>
+
+    <string name="share_text">Like this article? Share it with your friends</string>
+    <string name="web_redirect">Click here to read the full article</string>
+
 </resources>

@@ -6,12 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayush.headline.R
 import com.ayush.headline.data.models.Article
+import com.ayush.headline.data.models.LikedArticle
 import com.ayush.headline.data.models.NewsItem
 import com.ayush.headline.databinding.FragmentHomeBinding
 import com.ayush.headline.ui.adapters.NewsAdapter
@@ -47,12 +48,6 @@ class HomeFragment : Fragment(), NewsItemClicksListener {
         super.onAttach(context)
         this.context = context
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.visibility = View.VISIBLE
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,7 +55,7 @@ class HomeFragment : Fragment(), NewsItemClicksListener {
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         viewModel.userOnboarded()
         setupTabs()
-        
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.visibility = View.VISIBLE
 
         networkUtil.observe(viewLifecycleOwner) {
             when (it) {
@@ -102,7 +97,6 @@ class HomeFragment : Fragment(), NewsItemClicksListener {
                     binding.mainLayout.visibility = View.VISIBLE
                     binding.loadingLayout.visibility = View.GONE
                     if (it.data != null) {
-//                        dataByCategory[category] = it.data
                         setHomeData(it.data.articles)
                     }
                 }
@@ -210,14 +204,10 @@ class HomeFragment : Fragment(), NewsItemClicksListener {
         _binding = null
     }
 
-    override fun onItemClicked(url: String, article: Article) {
-
-        val bundle = bundleOf(
-            "url" to article.url,
-            "imageUrl" to article.urlToImage,
-            "title" to article.title,
-            "description" to article.description
-        )
+    override fun onItemClicked(article: Article, likedArticle: LikedArticle) {
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(article, likedArticle)
+        findNavController().navigate(action)
 
     }
 
