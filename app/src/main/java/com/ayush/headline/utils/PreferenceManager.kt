@@ -15,7 +15,9 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
+/*
+    Datastore used to store if the user is new or existing
+ */
 @Singleton
 class PreferenceManager @Inject constructor(
     @ApplicationContext private val context: Context

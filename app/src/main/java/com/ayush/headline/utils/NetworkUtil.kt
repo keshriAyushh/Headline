@@ -7,14 +7,13 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/*
+    This network util class will monitor network state changes and based on callback function,
+    we will post the value to the ui layer
+ */
 @Singleton
 class NetworkUtil @Inject constructor(
     @ApplicationContext private val context: Context
